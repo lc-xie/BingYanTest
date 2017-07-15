@@ -57,18 +57,14 @@ public class GetArtical {
     }
 
     public void getData()throws Exception{
-
-
                 String filepath = "/home/stephen/intelli/b.html";
                 String url_str = "https://meiriyiwen.com/";
                 URL url = null;
-
                 try {
                     url = new URL(url_str);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
                 String charset = "utf-8";
                 int sec_cont = 1000;
                 try {
@@ -79,16 +75,10 @@ public class GetArtical {
                     connection.setReadTimeout(10000);
                     connection.setRequestProperty("User-Agent", "application/x-java-serialized-object");
                     InputStream htm_in = connection.getInputStream();//获取网页源码
-
                     String htm_str = InputStream2String(htm_in,charset);//截取文章部分源码
-
-                    //Log.d("GetArtical:",htm_str);
                     setTitle(getTitle(htm_str));
                     setAuthor(getAuthor(htm_str));
                     setContent(getContent(htm_str));
-
-                    //saveHtml(filepath,htm_str);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -131,34 +121,16 @@ public class GetArtical {
   *获取文章内容
   */
     public String getContent(String html){
-        String temp;
-        Pattern p=Pattern.compile("<div class=\"article_text\">");
-        Matcher m=p.matcher(html);
-        int addressFirst;
-        boolean a=m.find();
-        if(a){
-            addressFirst=m.start();
-            int addressLast;
-            Pattern p1=Pattern.compile("</div>");
-            Matcher m1=p1.matcher(html);
-            boolean b=m1.find();
-            if(b){
-                addressLast=m1.start();
-                temp=html.substring(addressFirst+26,addressLast);
-
-                Pattern p4=Pattern.compile(" ");
-                Matcher m4=p4.matcher(temp);
-                temp=m4.replaceAll("");
-                Pattern p3= Pattern.compile("<p>");
-                Matcher m3=p3.matcher(temp);
-                temp=m3.replaceAll("");
-                Pattern p2=Pattern.compile("</p>");
-                Matcher m2=p2.matcher(temp);
-                temp=m2.replaceAll("\n");
-                return temp;
-            }
+        Pattern p1=Pattern.compile("<p>(.*?)</p>");
+        Matcher m1=p1.matcher(html);
+        boolean ifFind=m1.find();
+        String articalContent="";
+        while(ifFind){
+            String temp=m1.group(1);
+            articalContent=articalContent+"\t\t\t"+temp+"\n\n";
+            ifFind=m1.find();
         }
-        return "获取失败！";
+        return articalContent;
     }
     /*
         *获取文章标题

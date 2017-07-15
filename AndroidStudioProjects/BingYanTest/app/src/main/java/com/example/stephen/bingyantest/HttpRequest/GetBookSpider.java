@@ -66,7 +66,7 @@ public class GetBookSpider {
         return result;
     }
 
-    //获取和Book相关的html
+    //获取和Book相关的html,一个book放入一个list item中
     public static List<String> getBookHtmlList(String url){
         List<String> bookHtmlList=new ArrayList<>();
         Pattern p=Pattern.compile("<ul class=\"book-list\">(.*?)</ul>");
