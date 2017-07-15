@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.stephen.bingyantest.HttpRequest.GetArtical;
 import com.example.stephen.bingyantest.HttpRequest.GetBookSpider;
+import com.example.stephen.bingyantest.HttpRequest.GetHtmlFromUrl;
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.adapter.BookShelfAdapter;
 import com.example.stephen.bingyantest.bean.Books;
@@ -67,7 +68,7 @@ public class BookshelfFragment  extends Fragment {
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
         int mCacheSize = maxMemory / 8;
         lruCacheHelper=new LruCacheHelper(mCacheSize);
-        fileUtil=new FileUtil(getContext());
+        fileUtil=new FileUtil(getContext(),"/icon");
         imageTool=new ImageTool(lruCacheHelper,fileUtil);
 
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view_book);
@@ -99,7 +100,7 @@ public class BookshelfFragment  extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                bookMainHtml=GetBookSpider.sendRequest("http://book.meiriyiwen.com/");
+                bookMainHtml= GetHtmlFromUrl.sendRequest("http://book.meiriyiwen.com/");
                 List<String> bookHtmlList=new ArrayList<String>();
                 bookHtmlList = GetBookSpider.getBookHtmlList(bookMainHtml);
                 for (int i=0;i<bookHtmlList.size();i++){
@@ -160,7 +161,7 @@ public class BookshelfFragment  extends Fragment {
             @Override
             public void run() {
                 //获取第LOAD_BOOK_DATA页的有关book的html源码
-                String bookMainHtml=GetBookSpider.sendRequest(pageUrlList.get(LOAD_BOOK_DATA-1));
+                String bookMainHtml=GetHtmlFromUrl.sendRequest(pageUrlList.get(LOAD_BOOK_DATA-1));
                 List<String> bookHtmlList=new ArrayList<String>();
                 bookHtmlList = GetBookSpider.getBookHtmlList(bookMainHtml);
                 for (int i=0;i<bookHtmlList.size();i++){

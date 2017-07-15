@@ -2,13 +2,14 @@
 <android.support.v7.widget.CardView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="4dp">
     
     <RelativeLayout
@@ -17,13 +18,13 @@
 
         <ImageView
             android:id="@+id/image_voice"
-            android:src="@drawable/voiceTest"
+            android:src="@drawable/voicetest"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="133dp"
             android:scaleType="centerCrop"/>
 
         <TextView
-            android:id="@+id/text_number_voice"
+            android:id="@+id/text_tag_voice"
             android:text="461期"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -37,27 +38,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/text_title_voice"
+            android:id="@+id/text_name_voice"
             android:text="一个人要像一支队伍"
             android:layout_below="@+id/image_voice"
-            android:paddingBottom="4dp"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/voiceTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/text_author_voice"
             android:text="作者：刘瑜  主播：留儿"
-            android:layout_below="@+id/text_title_voice"
-            android:paddingBottom="4dp"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
+            android:layout_below="@+id/text_name_voice"
             android:textSize="16sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
             android:textColor="@color/voiceAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

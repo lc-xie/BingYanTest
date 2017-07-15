@@ -15,62 +15,16 @@ import java.util.List;
 
 /**
  * Created by stephen on 17-7-8.
+ * 从html源码中匹配出与book相关的部分，添加到一个list中
  */
 
 public class GetBookSpider {
-    public static String sendRequest(String url){
-        //定义一个字符串用来存储网页内容
-        String result = "";
-        //定义一个缓冲字符输入流
-        BufferedReader in = null;
-        try {
-           /* URL resultUrl = new URL(url);
-            URLConnection connection = resultUrl.openConnection();
-            connection.connect();
-            //初始化BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }*/
-            URL resultUrl = new URL(url);
-            HttpURLConnection connection=null;
-            connection=(HttpURLConnection)resultUrl.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
-            connection.setRequestProperty("User-Agent", "application/x-java-serialized-object");
-            InputStream inputStream = connection.getInputStream();//获取网页源码
-            //将网页源码转换成String
-            BufferedReader buff = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-            StringBuffer res = new StringBuffer();
-            String line = "";
-            while((line = buff.readLine()) != null){
-                res.append(line);
-            }
-            return res.toString();
-
-        } catch (Exception e) {
-            System.out.println("发送GET请求出现异常！" + e);
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        return result;
-    }
 
     //获取和Book相关的html,一个book放入一个list item中
-    public static List<String> getBookHtmlList(String url){
+    public static List<String> getBookHtmlList(String html){
         List<String> bookHtmlList=new ArrayList<>();
         Pattern p=Pattern.compile("<ul class=\"book-list\">(.*?)</ul>");
-        Matcher m=p.matcher(url);
+        Matcher m=p.matcher(html);
         String bookUrl;
         if (m.find()) {
             bookUrl = m.group();

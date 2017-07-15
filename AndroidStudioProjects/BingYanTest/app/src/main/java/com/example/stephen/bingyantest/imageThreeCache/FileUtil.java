@@ -29,10 +29,10 @@ public class FileUtil {
      */
     private String filePath=null;
 
-    public FileUtil(Context context){
+    public FileUtil(Context context,String lastPath){
         /*mDataRootPath = context.getCacheDir().getPath();
         filePath=mDataRootPath + FOLDER_NAME;*/
-        filePath=newGetCacheDir(context);
+        filePath=newGetCacheDir(context,lastPath);
     }
 
     /**
@@ -77,16 +77,16 @@ public class FileUtil {
         return bitmap;
     }
 
-    private String  newGetCacheDir(Context context) {
+    private String  newGetCacheDir(Context context,String lastPath) {
         String state = Environment.getExternalStorageState();
         File dir = null;
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             // 有sd卡
             dir = new File(Environment.getExternalStorageDirectory(), "/Android/data/" + context.getPackageName()
-                    + "/icon");
+                    + lastPath);
         } else {
             // 没有sd卡
-            dir = new File(context.getCacheDir(), "/icon");
+            dir = new File(context.getCacheDir(), lastPath);
         }
 
         if (!dir.exists()) {

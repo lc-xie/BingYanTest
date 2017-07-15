@@ -69,7 +69,7 @@ public class BookReadingActivity extends AppCompatActivity {
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
         int mCacheSize = maxMemory / 8;
         lruCacheHelper=new LruCacheHelper(mCacheSize);
-        fileUtil=new FileUtil(this);
+        fileUtil=new FileUtil(this,"/icon");
         imageTool=new ImageTool(lruCacheHelper,fileUtil);
 
         chapterRecyclerView=(RecyclerView)findViewById(R.id.recycler_view_chapter_list);

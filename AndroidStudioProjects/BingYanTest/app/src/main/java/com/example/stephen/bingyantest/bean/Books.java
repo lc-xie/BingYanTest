@@ -3,6 +3,8 @@ package com.example.stephen.bingyantest.bean;
 import android.util.Log;
 
 import com.example.stephen.bingyantest.HttpRequest.GetBookSpider;
+import com.example.stephen.bingyantest.HttpRequest.GetHtmlFromUrl;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -49,7 +51,7 @@ public class Books {
         if (m.find()) {
             bookChapterUrl = "http://book.meiriyiwen.com/" + m.group(1);
             //获取章节的html源码
-            chapterHtml= GetBookSpider.sendRequest(bookChapterUrl);
+            chapterHtml= GetHtmlFromUrl.sendRequest(bookChapterUrl);
             //根据章节链接获取章节名称list
             Pattern p1 = Pattern.compile("<li>.*?href.*?>(.*?)</a>.*?</li>");
             Matcher m1 = p1.matcher(chapterHtml);
@@ -68,7 +70,7 @@ public class Books {
             while (isFind2) {
                 String chapterUrl ="http://book.meiriyiwen.com/"+ m2.group(1);//获取类某一章节的url链接
                 //获取章节内容
-                String chapterItemHtml=GetBookSpider.sendRequest(chapterUrl);
+                String chapterItemHtml= GetHtmlFromUrl.sendRequest(chapterUrl);
                 Pattern p3 = Pattern.compile("<div class=\"chapter-bg\">(.*?)</div>");
                 Matcher m3 = p3.matcher(chapterItemHtml);
                 Boolean isFind3 = m3.find();

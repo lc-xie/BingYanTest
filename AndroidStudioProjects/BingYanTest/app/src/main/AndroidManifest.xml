@@ -22,7 +22,8 @@
         <activity
             android:name=".BookReadingActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ChapterReadingActivity"></activity>
+        <activity android:name=".ChapterReadingActivity" />
+        <activity android:name=".VoicePlayActivity"></activity>
     </application>
 
 </manifest>
