@@ -9,7 +9,13 @@ public class Voice {
     private String voiceAuthor;
     private String voiceNumber;
     private String voiceImageUrl;
-    private String voiceUrl;
+    private String voicePlayUrl;//进入播放网页页面的链接
+
+    public String getVoiceDownloadUrl() {
+        return voiceDownloadUrl;
+    }
+
+    private String voiceDownloadUrl;//音乐下载链接
 
     public String getVoiceName() {
         return voiceName;
@@ -27,8 +33,12 @@ public class Voice {
         return voiceImageUrl;
     }
 
-    public String getVoiceUrl() {
-        return voiceUrl;
+    public String getVoicePlayUrl() {
+        return voicePlayUrl;
+    }
+
+    public void setVoiceDownloadUrl(String voiceDownloadUrl) {
+        this.voiceDownloadUrl = voiceDownloadUrl;
     }
 
     public void setVoiceName(String voiceName) {
@@ -47,7 +57,7 @@ public class Voice {
         this.voiceImageUrl = voiceImageUrl;
     }
 
-    public void setVoiceUrl(String voiceUrl) {
-        this.voiceUrl = voiceUrl;
+    public void setVoicePlayUrl(String voicePlayUrl) {
+        this.voicePlayUrl = voicePlayUrl;
     }
 }

@@ -3,9 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorMain">#FDDF6D</color>
     <color name="viewpagerTextLow">#c2c2c2</color>
     <color name="viewpagerTextHigh">#000000</color>
     <color name="backgroundColor">#EDEDED</color>
+    <color name="bg_random_button">#ebe3e3e3</color>
     <color name="textColor">#111111</color>
     <color name="bgVoiceNumber">#3f3f3f</color>
     <color name="voiceAuthor">#9f9f9f</color>

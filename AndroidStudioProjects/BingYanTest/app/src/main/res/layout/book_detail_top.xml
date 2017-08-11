@@ -14,15 +14,15 @@
         android:layout_marginTop="10dp">
         <ImageView
             android:id="@+id/back_book_detail"
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/back"/>
 
         <TextView
             android:id="@+id/top_text"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
             android:textSize="20sp"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"

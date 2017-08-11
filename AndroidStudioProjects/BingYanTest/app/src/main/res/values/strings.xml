@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">BingYanTest</string>
+    <string name="app_name">每日一文</string>
+    <string name="menu_today_button">今日文章</string>
+    <string name="menu_random_button">随机一文</string>
+    <string name="menu_favorites_button">我的收藏</string>
+    <string name="network_fault">网络请求出错！</string>
+
 </resources>

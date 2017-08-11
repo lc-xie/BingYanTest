@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.stephen.bingyantest.BookReadingActivity;
 import com.example.stephen.bingyantest.R;
-import com.example.stephen.bingyantest.VoicePlayActivity;
-import com.example.stephen.bingyantest.bean.Books;
+import com.example.stephen.bingyantest.activity.VoicePlayActivity;
 import com.example.stephen.bingyantest.bean.Voice;
 import com.example.stephen.bingyantest.imageThreeCache.ImageCallBack;
 import com.example.stephen.bingyantest.imageThreeCache.ImageTool;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,9 +63,10 @@ public class VoiceAdapter extends RecyclerView.Adapter<VoiceAdapter.ViewHolder> 
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Voice voice = voicesList.get(position);
-               // String url = voice.getUrl();
+                Gson gson=new Gson();
+                String voiceJsonStr= gson.toJson(voice);
                 Intent intent = new Intent(view.getContext(), VoicePlayActivity.class);
-                //intent.putExtra("url_data", url);
+                intent.putExtra("voiceJsonStr",voiceJsonStr);
                 view.getContext().startActivity(intent);
             }
         });

@@ -1,118 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff"
-    tools:context="com.example.stephen.bingyantest.MainActivity">
+    tools:context="com.example.stephen.bingyantest.activity.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linear_pager_text"
+    <android.support.design.widget.AppBarLayout
+        android:background="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/viewpager_item_artical"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_weight="1"
-            android:textSize="@dimen/viewpagerTextSize"
-            android:textColor="@color/viewpagerTextHigh"
-            android:text="文章"/>
-        <TextView
-            android:id="@+id/viewpager_item_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="@dimen/viewpagerTextSize"
-            android:layout_weight="1"
-            android:textColor="@color/viewpagerTextLow"
-            android:text="声音"/>
-        <TextView
-            android:id="@+id/viewpager_item_bookshelf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="@dimen/viewpagerTextSize"
-            android:layout_weight="1"
-            android:textColor="@color/viewpagerTextLow"
-            android:text="书架"/>
+            app:layout_scrollFlags="scroll|snap|enterAlways"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear_pager_text"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal">
 
-    <LinearLayout
-        android:id="@+id/linear_cursor"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:layout_marginStart="100dp">
-        <ImageView
-            android:id="@+id/cursor"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:src="@drawable/cursor"
-            android:scaleType="matrix"
-            />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/viewpager_item_artical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textSize="@dimen/viewpagerTextSize"
+                android:textColor="@color/viewpagerTextHigh"
+                android:text="文章"/>
+            <TextView
+                android:id="@+id/viewpager_item_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/viewpagerTextSize"
+                android:layout_weight="1"
+                android:textColor="@color/viewpagerTextLow"
+                android:text="声音"/>
+            <TextView
+                android:id="@+id/viewpager_item_bookshelf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/viewpagerTextSize"
+                android:layout_weight="1"
+                android:textColor="@color/viewpagerTextLow"
+                android:text="书架"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_cursor"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="100dp">
+            <ImageView
+                android:id="@+id/cursor"
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:src="@drawable/cursor"
+                android:scaleType="matrix"
+                />
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:background="#ededed"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <!--<android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="250dp">
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrillFlags="scroll|exitUtilCollapsed">
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"/>
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"/>
-
-        </android.support.v4.widget.NestedScrollView>
-
-    </android.support.design.widget.CoordinatorLayout>-->
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

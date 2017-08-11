@@ -1,6 +1,5 @@
 package com.example.stephen.bingyantest.adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,11 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.stephen.bingyantest.BookReadingActivity;
+import com.example.stephen.bingyantest.activity.BookReadingActivity;
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.bean.Books;
 import com.example.stephen.bingyantest.imageThreeCache.ImageCallBack;

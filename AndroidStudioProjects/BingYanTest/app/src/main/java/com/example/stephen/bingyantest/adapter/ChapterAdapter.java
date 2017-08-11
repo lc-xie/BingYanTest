@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.stephen.bingyantest.BookReadingActivity;
-import com.example.stephen.bingyantest.ChapterReadingActivity;
+import com.example.stephen.bingyantest.activity.ChapterReadingActivity;
 import com.example.stephen.bingyantest.R;
 
 import java.util.List;

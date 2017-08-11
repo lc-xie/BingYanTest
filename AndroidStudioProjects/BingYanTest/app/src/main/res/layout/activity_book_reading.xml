@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.stephen.bingyantest.BookReadingActivity">
+    tools:context="com.example.stephen.bingyantest.activity.BookReadingActivity">
 
     <include layout="@layout/book_detail_top"/>
 
