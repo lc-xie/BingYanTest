@@ -16,13 +16,10 @@ import android.widget.TextView;
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.adapter.ChapterAdapter;
 import com.example.stephen.bingyantest.bean.Books;
-import com.example.stephen.bingyantest.fragment.BookshelfFragment;
 import com.example.stephen.bingyantest.imageThreeCache.FileUtil;
 import com.example.stephen.bingyantest.imageThreeCache.ImageCallBack;
 import com.example.stephen.bingyantest.imageThreeCache.ImageTool;
 import com.example.stephen.bingyantest.imageThreeCache.LruCacheHelper;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,7 +36,7 @@ public class BookReadingActivity extends AppCompatActivity {
     List<String> chapterContentList;
 
     /**
-     *三级缓存相关类
+     * 三级缓存相关类
      */
     private ImageTool imageTool;
     private LruCacheHelper lruCacheHelper;
@@ -56,9 +53,9 @@ public class BookReadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_reading);
         //初始化头布局
-        topText=(TextView)findViewById(R.id.top_text);
+        topText = (TextView) findViewById(R.id.top_text);
         topText.setText("详情");
-        back=(ImageView)findViewById(R.id.back_book_detail);
+        back = (ImageView) findViewById(R.id.back_book_detail);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,61 +64,64 @@ public class BookReadingActivity extends AppCompatActivity {
         });
 
         //初始化图片三级存储有关类
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int mCacheSize = maxMemory / 8;
-        lruCacheHelper=new LruCacheHelper(mCacheSize);
-        fileUtil=new FileUtil(this,"/icon");
-        imageTool=new ImageTool(lruCacheHelper,fileUtil);
+        int mCacheSize = (int) Runtime.getRuntime().maxMemory() / 8;//应用内存的八分之一
+        lruCacheHelper = new LruCacheHelper(mCacheSize);
+        fileUtil = new FileUtil(this, "/icon");
+        imageTool = new ImageTool(lruCacheHelper, fileUtil);
 
-        chapterRecyclerView=(RecyclerView)findViewById(R.id.recycler_view_chapter_list);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        chapterRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_chapter_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         chapterRecyclerView.setLayoutManager(linearLayoutManager);
 
-        bookAuthor=(TextView)findViewById(R.id.book_author);
-        bookImage=(ImageView)findViewById(R.id.book_image);
-        bookName=(TextView)findViewById(R.id.book_name);
+        bookAuthor = (TextView) findViewById(R.id.book_author);
+        bookImage = (ImageView) findViewById(R.id.book_image);
+        bookName = (TextView) findViewById(R.id.book_name);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Intent intent=getIntent();
-                String url=intent.getStringExtra("url_data");
+                Intent intent = getIntent();
+                String url = intent.getStringExtra("url_data");
                 Message m = new Message();
-                if(url!=null&&url!="") {
+                if (url != null && url != "") {
                     books = new Books(url);
                     books.intiChapter(url);
                     chapterList = books.getChapterNameList();
                     chapterContentList = books.getChapterContentList();
                     Log.d("BookReadingActivity", "size:" + chapterContentList.size());
                     m.what = 11;
-                }else m.what=10;
+                } else m.what = 10;
                 hander.sendMessage(m);
             }
         }).start();
 
-        hander=new Handler(){
+        hander = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what==11){
+                if (msg.what == 11) {
                     bookName.setText(books.getBookName());
                     bookAuthor.setText(books.getBookAuthor());
-                    try {
-                        Bitmap bitmap=imageTool.getBitmap(books.getBookImageUrl(), new ImageCallBack() {
+                    /*try {
+                        Bitmap bitmap = imageTool.downloadBitmapByImageRequest(books.getBookImageUrl(), new ImageCallBack() {
                             @Override
                             public void imageLoadded(Bitmap bitmap, String tag) {
                                 bookImage.setImageBitmap(bitmap);
                             }
                         });
                         bookImage.setImageBitmap(bitmap);
-                    }catch (IOException e){
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    }
-                    chapterAdapter=new ChapterAdapter(chapterList,chapterContentList);
+                    }*/
+                    //通过imageLoader加载图片
+                    imageTool.downloadBitmapByImageLoader(books.getBookImageUrl(),
+                            new ImageTool.bookImageListener(bookImage, books.getBookImageUrl()));
+
+                    chapterAdapter = new ChapterAdapter(chapterList, chapterContentList);
                     chapterRecyclerView.setAdapter(chapterAdapter);
-                }else {
+                } else {
                     bookName.setText("null");
                     bookAuthor.setText("null");
-                    bookImage.setImageResource(R.drawable.temp);
+                    bookImage.setImageResource(R.drawable.book_default);
                 }
             }
         };

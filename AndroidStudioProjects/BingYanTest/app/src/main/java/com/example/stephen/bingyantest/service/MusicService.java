@@ -66,7 +66,6 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent,int flags, int startId) {
         //获取voice相关信息
         File file=new File(intent.getStringExtra("voice_path"));
-        if (!file.exists())Log.d("MusicService","File don't exist!!!!");
         voiceAuthor=intent.getStringExtra("voice_author");
         voiceName=intent.getStringExtra("voice_name");
         //初始化mediaplay

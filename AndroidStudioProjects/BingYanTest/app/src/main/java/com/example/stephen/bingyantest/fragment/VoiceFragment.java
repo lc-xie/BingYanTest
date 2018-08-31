@@ -89,7 +89,7 @@ public class VoiceFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mainHtml= GetHtmlFromUrl.sendRequest("http://voice.meiriyiwen.com/");
+                mainHtml= GetHtmlFromUrl.getHtmlByUrl("http://voice.meiriyiwen.com/");
                 Message message=new Message();
                 if (mainHtml!=""){
                     currentPageHtml=mainHtml;
@@ -164,7 +164,7 @@ public class VoiceFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                currentPageHtml=GetHtmlFromUrl.sendRequest(getNextPageUrl());
+                currentPageHtml=GetHtmlFromUrl.getHtmlByUrl(getNextPageUrl());
                 if (currentPageHtml!=""){
                     voiceTagList.clear();
                     voiceNameList.clear();

@@ -11,11 +11,19 @@ import java.net.URLConnection;
  * Created by stephen on 17-7-6.
  */
 
-public class Artical {
+public class Article {
     private String articalTitle;
     private String articalAuthor;
     private String articalContent;
+    private String articleNextRandom;   //随机文章链接
 
+    public String getArticleNextRandom() {
+        return articleNextRandom;
+    }
+
+    public void setArticleNextRandom(String articleNextRandom) {
+        this.articleNextRandom = articleNextRandom;
+    }
 
     public String getArticalTitle() {
         return articalTitle;

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/today_artical"
+        android:id="@+id/today_article"
         android:title="@string/menu_today_button"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/random_artical"
+        android:id="@+id/random_article"
         android:title="@string/menu_random_button"
         app:showAsAction="never"/>
 

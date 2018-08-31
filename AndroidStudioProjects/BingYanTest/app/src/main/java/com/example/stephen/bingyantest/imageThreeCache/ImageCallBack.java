@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 
 public interface ImageCallBack {
+
     public void imageLoadded(Bitmap bitmap, String tag);
 
 }

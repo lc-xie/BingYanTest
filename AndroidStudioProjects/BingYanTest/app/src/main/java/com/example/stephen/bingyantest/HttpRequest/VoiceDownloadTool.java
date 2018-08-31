@@ -1,12 +1,9 @@
 package com.example.stephen.bingyantest.HttpRequest;
 
-import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -14,17 +11,16 @@ import java.net.URL;
 
 /**
  * Created by stephen on 17-7-21.
- * 录音文件获取工具类
- * 文件不存在则下载
- * 返回文件路径
+ * 音频文件获取工具类
+ * 文件不在本地则从网页下载到本地，并返回本地文件路径
  */
 
 public class VoiceDownloadTool {
-    public static String downloadVoice(String urlStr, String fileName){
-        File file = new File(Environment.getExternalStorageDirectory(),fileName);
-        if (file.exists()){   //若文件存在，则直接读取
+    public static String downloadVoice(String urlStr, String fileName) {
+        File file = new File(Environment.getExternalStorageDirectory(), fileName);
+        if (file.exists()) {   //若文件存在，则直接读取
             return file.getAbsolutePath();
-        }else {     //不存在则下载
+        } else {     //不存在则下载
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
@@ -53,7 +49,7 @@ public class VoiceDownloadTool {
                 tempFile.renameTo(file);
                 return file.getAbsolutePath();
             } catch (Exception e) {
-                System.out.println("发送GET请求出现异常！" + e);
+                System.out.println("下载voice时，发送GET请求出现异常！" + e);
                 e.printStackTrace();
                 return null;
             }

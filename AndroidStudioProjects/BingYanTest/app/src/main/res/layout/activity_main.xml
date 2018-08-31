@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,74 +8,76 @@
     tools:context="com.example.stephen.bingyantest.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:background="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|snap|enterAlways"/>
+            app:layout_scrollFlags="scroll|snap|enterAlways" />
 
         <LinearLayout
             android:id="@+id/linear_pager_text"
-            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="200dp"
             android:layout_height="20dp"
-            android:orientation="horizontal"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/viewpager_item_artical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_weight="1"
-                android:textSize="@dimen/viewpagerTextSize"
+                android:gravity="center_horizontal"
+                android:text="文章"
                 android:textColor="@color/viewpagerTextHigh"
-                android:text="文章"/>
+                android:textSize="@dimen/viewpagerTextSize" />
+
             <TextView
                 android:id="@+id/viewpager_item_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="@dimen/viewpagerTextSize"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="声音"
                 android:textColor="@color/viewpagerTextLow"
-                android:text="声音"/>
+                android:textSize="@dimen/viewpagerTextSize" />
+
             <TextView
                 android:id="@+id/viewpager_item_bookshelf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="@dimen/viewpagerTextSize"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="书架"
                 android:textColor="@color/viewpagerTextLow"
-                android:text="书架"/>
+                android:textSize="@dimen/viewpagerTextSize" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_cursor"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp">
+            android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/cursor"
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
-                android:src="@drawable/cursor"
                 android:scaleType="matrix"
-                />
+                android:gravity="center_horizontal"
+                android:src="@drawable/cursor" />
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

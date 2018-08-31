@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.stephen.bingyantest.R;
+import com.example.stephen.bingyantest.activity.MyApplication;
 import com.example.stephen.bingyantest.activity.VoicePlayActivity;
 import com.example.stephen.bingyantest.bean.Voice;
 import com.example.stephen.bingyantest.imageThreeCache.ImageCallBack;
@@ -79,8 +82,8 @@ public class VoiceAdapter extends RecyclerView.Adapter<VoiceAdapter.ViewHolder> 
         mHolder.voiceAuthor.setText(voice.getVoiceAuthor());
         mHolder.voiceName.setText(voice.getVoiceName());
         mHolder.voiceTag.setText(voice.getVoiceNumber());
-        try {
-            Bitmap bitmap=imageTool.getBitmap(voice.getVoiceImageUrl(), new ImageCallBack() {
+        /*try {
+            Bitmap bitmap=imageTool.downloadBitmapByImageRequest(voice.getVoiceImageUrl(), new ImageCallBack() {
                 @Override
                 public void imageLoadded(Bitmap bitmap, String tag) {
                     if (bitmap!=null&&mHolder.voiceImage!=null){
@@ -93,12 +96,15 @@ public class VoiceAdapter extends RecyclerView.Adapter<VoiceAdapter.ViewHolder> 
                 mHolder.voiceImage.setImageBitmap(bitmap);
                 //Log.d("ImageAdapter","setImage!!!!");
             }else {
-                mHolder.voiceImage.setImageResource(R.drawable.temp);
+                mHolder.voiceImage.setImageResource(R.drawable.book_default);
                 Log.d("ImageAdapter","setImage failed!!!!");
             }
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }*/
+        //通过imageLoader加载图片
+        imageTool.downloadBitmapByImageLoader(voice.getVoiceImageUrl(), new
+                ImageTool.bookImageListener(mHolder.voiceImage, voice.getVoiceImageUrl()));
     }
 
     @Override
