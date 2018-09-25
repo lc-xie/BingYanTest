@@ -1,101 +1,111 @@
 package com.example.stephen.bingyantest.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.stephen.bingyantest.HttpRequest.GetArticleTask;
+import com.example.stephen.bingyantest.HttpUtil.ArticleUtil;
 import com.example.stephen.bingyantest.R;
+import com.example.stephen.bingyantest.bean.Article;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by stephen on 17-7-2.
  */
 
 public class ArticleFragment extends Fragment {
-    private View view;
+
+    private static final String TAG = ArticleFragment.class.getSimpleName();
+
+    private static final String NET_WORK_ERROR = "网络请求出错";
+
     private ScrollView scrollView;
     public TextView title, author, content;
-    private boolean ifDown = false;                         // 是否已经从网络下载了文章
-    private String mainUrl = "https://meiriyiwen.com";
-    private String randomUrl = mainUrl + "/random";         // 获取随机文章的链接
-    private String todayArticleName;                        // 今日文章的标题（文件名）
+    private String todayArticleName;            // 今日文章的标题（文件名）
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_artical, container, false);
+        View view = inflater.inflate(R.layout.fragment_artical, container, false);
         scrollView = (ScrollView) view.findViewById(R.id.scrollView_artical);
 
         title = (TextView) view.findViewById(R.id.artical_title);
         author = (TextView) view.findViewById(R.id.artical_author);
         content = (TextView) view.findViewById(R.id.artical_content);
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("test dialog")
+                        .create();
+                alertDialog.show();
+            }
+        });
 
-        new GetArticleTask(this).execute(mainUrl);
+        showTodayArticle();
 
         return view;
     }
 
-    //从本地读取今日的文章
-    public void getArticleFromFile(String name) {
-        File file = new File(Environment.getExternalStorageDirectory(), "/meiriyiwen/Article/" + name + ".txt");
-        if (!file.exists()) {
-            new GetArticleTask(this).execute(mainUrl);
+    // 获取今日的文章
+    public void showTodayArticle() {
+        scrollView.scrollTo(0, 0);//回到顶部
+        Article article = ArticleUtil.getArticleFromFile(todayArticleName);
+        if (article != null) {
+            showArticleOnUI(article);
         } else {
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                BufferedReader buff = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-                String line = "";
-                line = buff.readLine();
-                title.setText(line);
-                while (true) {
-                    line = buff.readLine();
-                    if (line != null && line.length() > 0) {
-                        author.setText(line);
-                        break;
-                    }
-                }
-                StringBuilder res = new StringBuilder();
-                while ((line = buff.readLine()) != null) {
-                    res.append(line);
-                }
-                content.setText(res.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ArticleUtil.getTodayArticle(new ShowArticleCallBack());
         }
     }
 
-    public void showTodayArticle() {
-        getArticleFromFile(todayArticleName);
-        scrollView.scrollTo(0, 0);//回到顶部
-    }
-
+    // 获取随机文章
     public void showRandomArticle() {
-        new GetArticleTask(this).execute(randomUrl);
+        ArticleUtil.getRandomArticle(new ShowArticleCallBack());
         scrollView.scrollTo(0, 0);//回到顶部
     }
 
-    //获取今日文章的标题
+    // okHttp显示文章的回调
+    private class ShowArticleCallBack implements Callback {
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            Article article = ArticleUtil.getArticleFromResponse(response);
+            showArticleOnUI(article);
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            //author.setText(NET_WORK_ERROR);
+            Log.e(TAG, "网络请求获取文章失败");
+        }
+    }
+
+    // 主线程将文章更新到UI
+    public void showArticleOnUI(final Article article) {
+        this.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                title.setText(article.getArticalTitle());
+                author.setText(article.getArticalAuthor());
+                content.setText(article.getArticalContent());
+                scrollView.scrollTo(0, 0);//回到顶部
+            }
+        });
+    }
+
+    // 设置今日文章的标题
     public void setTodayArticleName(String name) {
         this.todayArticleName = name;
     }

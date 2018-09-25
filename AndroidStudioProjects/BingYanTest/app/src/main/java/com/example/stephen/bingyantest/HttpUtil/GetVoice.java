@@ -1,6 +1,4 @@
-package com.example.stephen.bingyantest.HttpRequest;
-
-import android.util.Log;
+package com.example.stephen.bingyantest.HttpUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,15 +2,12 @@ package com.example.stephen.bingyantest.imageThreeCache;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.activity.MyApplication;
-import com.example.stephen.bingyantest.volley.VolleyHelper;
+import com.example.stephen.bingyantest.HttpUtil.VolleyUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,30 +19,45 @@ import java.io.IOException;
  */
 
 public class ImageTool {
+    private LruCacheHelper lruCacheHelper;      // 缓存类lruCache
+    private FileUtil fileUtilHelper;            // 文件管理辅助类
+    private static ImageTool imageTool = null;
 
-    private static LruCacheHelper lruCacheHelper;//缓存根据类
-    private static FileUtil fileUtilHelper;//文贾管理辅助类
-    private VolleyHelper volleyHelper;
-    //private ImageCallBack imageCallBack;
-
-    public ImageTool(LruCacheHelper lruCacheHelper,FileUtil fileUtilHelper){
-        this.lruCacheHelper=lruCacheHelper;
-        this.fileUtilHelper=fileUtilHelper;
-        volleyHelper = VolleyHelper.getVolleyInstance(MyApplication.getContext());
+    private ImageTool(){
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int mCacheSize = maxMemory / 8;
+        lruCacheHelper = new LruCacheHelper(mCacheSize);
+        this.fileUtilHelper = new FileUtil();
     }
 
-    /**
-     * 从缓存和文件中拿图片
-     */
+    public static ImageTool getInstance() {
+        if (imageTool == null) {
+            imageTool = new ImageTool();
+        }
+        return imageTool;
+    }
+
+    // 获取图片，三级加载（缓存-本地-网络）
+    public void getBitmap(ImageView imageView, String url) {
+        Bitmap bitmap = getBitmapFromFileOrCache(url);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            return;
+        }
+        getBitmapByVolley(url, imageView);
+    }
+
+    // 缓存和本地加载
     public Bitmap getBitmapFromFileOrCache(String url) {
         Bitmap bitmap;
         String imageName=url.substring(url.lastIndexOf(File.separator)+1);
         if (lruCacheHelper.get(imageName)!=null){
             return lruCacheHelper.get(imageName);           // 缓存命中
         }
+        // 缓存未命中
         try {
-            if(fileUtilHelper.getImageFromStorage(imageName)!=null){
-                bitmap =fileUtilHelper.getImageFromStorage(imageName);
+            if(fileUtilHelper.getImageFromFile(imageName)!=null){
+                bitmap =fileUtilHelper.getImageFromFile(imageName);
                 lruCacheHelper.put(imageName, bitmap);      // 加入内存缓存
                 return bitmap;
             }
@@ -55,44 +67,18 @@ public class ImageTool {
         return null;
     }
 
-    /**
-     * 通过ImageRequest加载图片
-     * @param imageCallBack 加载成功回调
-     * @throws IOException
-     */
-    public void downloadBitmapByImageRequest(final String url, final ImageCallBack imageCallBack)throws IOException {
-        final String imageName=url.substring(url.lastIndexOf(File.separator)+1);
-        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                imageCallBack.imageLoadded(response, url);
-                fileUtilHelper.putImageToStorage(imageName, response);
-                lruCacheHelper.put(imageName, response);
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.ARGB_4444, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MyApplication.getContext(), "图片加载失败！", Toast.LENGTH_SHORT).show();
-            }
-        });
-        volleyHelper.addRequest(imageRequest);
+    // 网络加载图片 Volley
+    public void getBitmapByVolley(String url, ImageView imageView) {
+        ImageLoader imageLoader = VolleyUtil.getVolleyInstance(MyApplication.getContext()).getImageLoader();
+        imageLoader.get(url, new BookImageListener(imageView, url));
     }
 
-    /**
-     * 通过ImageLoader加载图片
-     * @param listener 回调，这里由于要存储到本地文件夹，故自定义一个Listener
-     */
-    public void downloadBitmapByImageLoader(String url, ImageLoader.ImageListener listener) {
-        ImageLoader imageLoader = volleyHelper.getImageLoader();
-        imageLoader.get(url, listener);
-    }
-
-    public static class bookImageListener implements ImageLoader.ImageListener {
+    public class BookImageListener implements ImageLoader.ImageListener {
 
         private ImageView imageView;
         private String url;
 
-        public bookImageListener(ImageView imageView, String url) {
+        public BookImageListener(ImageView imageView, String url) {
             super();
             this.imageView = imageView;
             this.url = url;
@@ -100,12 +86,13 @@ public class ImageTool {
 
         @Override
         public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-            Bitmap bitmap1 = response.getBitmap();
-            if (bitmap1 != null) {
-                imageView.setImageBitmap(bitmap1);
-                //保存到本地,不需要保存到缓存，imageLoader自带缓存功能
+            Bitmap bitmap = response.getBitmap();
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
                 String imageName=url.substring(url.lastIndexOf(File.separator)+1);
-                fileUtilHelper.putImageToStorage(imageName, bitmap1);
+                //保存到缓存和本地
+                lruCacheHelper.put(imageName, bitmap);
+                fileUtilHelper.saveImage(imageName, bitmap);
             } else {
                 imageView.setImageDrawable(MyApplication.getContext().getResources().getDrawable(R.drawable.book_default,null));
             }

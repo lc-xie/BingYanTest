@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.stephen.bingyantest.HttpRequest.VoiceDownloadTool;
+import com.example.stephen.bingyantest.HttpUtil.VoiceDownloadTool;
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.bean.Voice;
 import com.example.stephen.bingyantest.service.MusicService;

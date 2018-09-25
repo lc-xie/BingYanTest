@@ -1,4 +1,4 @@
-package com.example.stephen.bingyantest.HttpRequest;
+package com.example.stephen.bingyantest.HttpUtil;
 
 import android.os.Environment;
 

@@ -32,6 +32,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private ViewPager viewPager;
     private FragmentAdapter fragmentAdapter;
     private List<Fragment> fragmentList;
@@ -255,4 +257,5 @@ public class MainActivity extends AppCompatActivity {
         }
         photoCache.delete();
     }
+
 }

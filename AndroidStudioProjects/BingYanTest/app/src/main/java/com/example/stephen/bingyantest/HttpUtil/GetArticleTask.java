@@ -1,4 +1,4 @@
-package com.example.stephen.bingyantest.HttpRequest;
+package com.example.stephen.bingyantest.HttpUtil;
 
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
  * 下载文章task
  */
 
+@Deprecated
 public class GetArticleTask extends AsyncTask<String, String, Article> {
     private static final String TAG = GetArticleTask.class.getSimpleName();
 
@@ -35,19 +36,20 @@ public class GetArticleTask extends AsyncTask<String, String, Article> {
         if (!strings[0].contains("random")) {
             isTodayArticle = true;
         }
-        String html_all = GetHtmlFromUrl.getHtmlByUrl(strings[0]);
+        String html_all = HttpTool.getHtmlByOkHttp(strings[0]);
         return parseHtmlToArticle(html_all);
     }
 
     @Override
     protected void onPostExecute(Article article) {
+        ArticleFragment articleFragment = articleFragmentWeakReference.get();
         if (article != null) {
-            ArticleFragment articleFragment = articleFragmentWeakReference.get();
             articleFragment.title.setText(article.getArticalTitle());
             articleFragment.author.setText(article.getArticalAuthor());
             articleFragment.content.setText(article.getArticalContent());
             if (isTodayArticle) articleFragment.setTodayArticleName(article.getArticalTitle());
         } else {
+            articleFragment.author.setText("网络出错");
             Toast.makeText(MyApplication.getContext(), "获取文章失败", Toast.LENGTH_SHORT).show();
         }
     }
@@ -63,7 +65,7 @@ public class GetArticleTask extends AsyncTask<String, String, Article> {
             if (html_all != null) {
                 article.setArticalTitle(getTitle(html_all));                       //获取标题
                 article.setArticalAuthor(getAuthor(html_all));                       //获取标题
-                article.setArticalContent(getContent(html_all));                       //获取标题
+                article.setArticalContent(getContent(html_all));                       //获取文章内容
                 File dir = new File(Environment.getExternalStorageDirectory(), "/meiriyiwen/Article");
                 if (!dir.exists()) dir.mkdirs();
                 String name = article.getArticalTitle() + ".txt";

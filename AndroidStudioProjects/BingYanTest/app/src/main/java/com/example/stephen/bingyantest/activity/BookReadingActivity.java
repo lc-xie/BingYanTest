@@ -1,7 +1,6 @@
 package com.example.stephen.bingyantest.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +14,9 @@ import android.widget.TextView;
 
 import com.example.stephen.bingyantest.R;
 import com.example.stephen.bingyantest.adapter.ChapterAdapter;
-import com.example.stephen.bingyantest.bean.Books;
-import com.example.stephen.bingyantest.imageThreeCache.FileUtil;
-import com.example.stephen.bingyantest.imageThreeCache.ImageCallBack;
+import com.example.stephen.bingyantest.bean.Book;
 import com.example.stephen.bingyantest.imageThreeCache.ImageTool;
-import com.example.stephen.bingyantest.imageThreeCache.LruCacheHelper;
 
-import java.io.IOException;
 import java.util.List;
 
 public class BookReadingActivity extends AppCompatActivity {
@@ -31,22 +26,16 @@ public class BookReadingActivity extends AppCompatActivity {
     ImageView bookImage;
     TextView bookName;
     TextView bookAuthor;
-    Books books;
+    Book books;
     List<String> chapterList;
     List<String> chapterContentList;
 
-    /**
-     * 三级缓存相关类
-     */
     private ImageTool imageTool;
-    private LruCacheHelper lruCacheHelper;
-    private FileUtil fileUtil;
-
 
     RecyclerView chapterRecyclerView;
     ChapterAdapter chapterAdapter;
 
-    Handler hander;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +52,7 @@ public class BookReadingActivity extends AppCompatActivity {
             }
         });
 
-        //初始化图片三级存储有关类
-        int mCacheSize = (int) Runtime.getRuntime().maxMemory() / 8;//应用内存的八分之一
-        lruCacheHelper = new LruCacheHelper(mCacheSize);
-        fileUtil = new FileUtil(this, "/icon");
-        imageTool = new ImageTool(lruCacheHelper, fileUtil);
+        imageTool = ImageTool.getInstance();
 
         chapterRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_chapter_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -84,37 +69,25 @@ public class BookReadingActivity extends AppCompatActivity {
                 String url = intent.getStringExtra("url_data");
                 Message m = new Message();
                 if (url != null && url != "") {
-                    books = new Books(url);
+                    books = new Book(url);
                     books.intiChapter(url);
                     chapterList = books.getChapterNameList();
                     chapterContentList = books.getChapterContentList();
                     Log.d("BookReadingActivity", "size:" + chapterContentList.size());
                     m.what = 11;
                 } else m.what = 10;
-                hander.sendMessage(m);
+                handler.sendMessage(m);
             }
         }).start();
 
-        hander = new Handler() {
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 11) {
                     bookName.setText(books.getBookName());
                     bookAuthor.setText(books.getBookAuthor());
-                    /*try {
-                        Bitmap bitmap = imageTool.downloadBitmapByImageRequest(books.getBookImageUrl(), new ImageCallBack() {
-                            @Override
-                            public void imageLoadded(Bitmap bitmap, String tag) {
-                                bookImage.setImageBitmap(bitmap);
-                            }
-                        });
-                        bookImage.setImageBitmap(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
                     //通过imageLoader加载图片
-                    imageTool.downloadBitmapByImageLoader(books.getBookImageUrl(),
-                            new ImageTool.bookImageListener(bookImage, books.getBookImageUrl()));
+                    imageTool.getBitmap(bookImage , books.getBookImageUrl());
 
                     chapterAdapter = new ChapterAdapter(chapterList, chapterContentList);
                     chapterRecyclerView.setAdapter(chapterAdapter);

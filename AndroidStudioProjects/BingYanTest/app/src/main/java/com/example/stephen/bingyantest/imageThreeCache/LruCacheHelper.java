@@ -5,12 +5,13 @@ import android.support.v4.util.LruCache;
 
 /**
  * Created by stephen on 17-7-10.
+ * 缓存
  */
 
-public class LruCacheHelper extends LruCache<String,Bitmap> {
+public class LruCacheHelper extends LruCache<String, Bitmap> {
 
     /*
-    key=image name,not image url!
+     * key = imageName, not imageUrl!
      */
 
     public LruCacheHelper(int maxSize) {
@@ -19,6 +20,6 @@ public class LruCacheHelper extends LruCache<String,Bitmap> {
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getHeight()*value.getRowBytes();
+        return value.getHeight() * value.getRowBytes();
     }
 }

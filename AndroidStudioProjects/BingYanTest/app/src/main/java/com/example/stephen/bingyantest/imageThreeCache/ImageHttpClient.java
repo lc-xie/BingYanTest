@@ -16,16 +16,17 @@ import java.net.URL;
  * 从网络获取图片类
  */
 
+@Deprecated
 public class ImageHttpClient {
+
     /**
      * get image from internet by image url
      *
      * @param urlStr
      * @return
      */
-    public static Bitmap getImageFromNet(String urlStr) {
+    public static Bitmap getImageByHttpUrlConnection(String urlStr) {
         Bitmap bitmap = null;
-        Bitmap bitmap1 = null;
         byte[] data;
         try {
             URL url = new URL(urlStr);

@@ -1,4 +1,4 @@
-package com.example.stephen.bingyantest.volley;
+package com.example.stephen.bingyantest.HttpUtil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,12 +14,12 @@ import com.android.volley.toolbox.Volley;
  * Volley网络请求工具类
  */
 
-public class VolleyHelper {
+public class VolleyUtil {
 
     public final static String REQUEST_TAG_ARTICLE = "stringRequestOfArticle";
 
     private RequestQueue requestQueue;
-    private static volatile VolleyHelper volleyInstance;
+    private static volatile VolleyUtil volleyInstance;
     private ImageLoader imageLoader;
 
     private class BookImageCache implements ImageLoader.ImageCache {
@@ -47,16 +47,16 @@ public class VolleyHelper {
         }
     }
 
-    private VolleyHelper(Context context) {
+    private VolleyUtil(Context context) {
         requestQueue = Volley.newRequestQueue(context);
         imageLoader = new ImageLoader(requestQueue, new BookImageCache());
     }
 
-    public static VolleyHelper getVolleyInstance(Context context) {
+    public static VolleyUtil getVolleyInstance(Context context) {
         if (volleyInstance == null) {
-            synchronized (VolleyHelper.class) {
+            synchronized (VolleyUtil.class) {
                 if (volleyInstance == null) {
-                    volleyInstance = new VolleyHelper(context);
+                    volleyInstance = new VolleyUtil(context);
                 }
             }
         }

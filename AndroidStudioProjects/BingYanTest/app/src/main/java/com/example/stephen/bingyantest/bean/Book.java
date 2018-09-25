@@ -1,6 +1,6 @@
 package com.example.stephen.bingyantest.bean;
 
-import com.example.stephen.bingyantest.HttpRequest.GetHtmlFromUrl;
+import com.example.stephen.bingyantest.HttpUtil.HttpTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 
 /**
  * Created by stephen on 17-7-5.
- *在fragment里面只需要显示image,name和author,
+ * 在fragment里面只需要显示image,name和author,
  * 所以构造函数初始化books时只需要加载这三项
  * 章节信息点击进入相应界面再加载
  */
 
-public class Books {
+public class Book {
 
     private String url;
 
@@ -26,15 +26,18 @@ public class Books {
     private List<String> chapterNameList;
     private List<String> chapterContentList;
 
-    public Books(String url) {
-        this.url=url;
-        bookAuthor="";
-        bookName="";
-        bookImageUrl="";
+    public Book() {
+    }
 
-        bookName=getName(url);
-        bookAuthor=getAuthor(url);
-        bookImageUrl=getImage(url);
+    public Book(String url) {
+        this.url = url;
+    }
+
+    public Book(String url, String bookName, String bookAuthor, String bookImageUrl) {
+        this.url = url;
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
+        this.bookImageUrl = bookImageUrl;
     }
 
     //获取完整的章节名称
@@ -48,7 +51,7 @@ public class Books {
         if (m.find()) {
             bookChapterUrl = "http://book.meiriyiwen.com/" + m.group(1);
             //获取章节的html源码
-            chapterHtml= GetHtmlFromUrl.getHtmlByUrl(bookChapterUrl);
+            chapterHtml= HttpTool.getHtmlByHttpUrlConnection(bookChapterUrl);
             //根据章节链接获取章节名称list
             Pattern p1 = Pattern.compile("<li>.*?href.*?>(.*?)</a>.*?</li>");
             Matcher m1 = p1.matcher(chapterHtml);
@@ -67,7 +70,7 @@ public class Books {
             while (isFind2) {
                 String chapterUrl ="http://book.meiriyiwen.com/"+ m2.group(1);//获取类某一章节的url链接
                 //获取章节内容
-                String chapterItemHtml= GetHtmlFromUrl.getHtmlByUrl(chapterUrl);
+                String chapterItemHtml= HttpTool.getHtmlByHttpUrlConnection(chapterUrl);
                 Pattern p3 = Pattern.compile("<div class=\"chapter-bg\">(.*?)</div>");
                 Matcher m3 = p3.matcher(chapterItemHtml);
                 Boolean isFind3 = m3.find();
@@ -89,39 +92,6 @@ public class Books {
             }
         }else System.out.print("get chapterNameList Failed!");
     }
-    //获取完整的图片链接/url
-    String getImage(String url) {
-        String fault="获取图片url失败";
-        //获取图片的url
-        Pattern pattern = Pattern.compile("src=\"(.*?)\"/></a>");
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            return  "http://book.meiriyiwen.com" + matcher.group(1);
-        }
-        return null;
-    }
-    //获取书名l
-    String getName(String url) {
-        String fault="获取书名失败";
-        Pattern pattern = Pattern.compile("<a class=\"book-bg\".*?title=\"(.*?)\"><img");
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group(1);
-        } else {
-            return fault;
-        }
-    }
-    //获取作者名字
-    String getAuthor(String url) {
-        String fault="获取作者失败";
-        Pattern pattern = Pattern.compile("<div class=\"book-author\">(.*?)</div>");
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group(1);
-        } else {
-            return fault;
-        }
-    }
 
     public String getUrl() {
         return url;
@@ -130,23 +100,52 @@ public class Books {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public String getBookAuthor() {
+        return bookAuthor;
+    }
+
+    public void setBookAuthor(String bookAuthor) {
+        this.bookAuthor = bookAuthor;
+    }
+
     public String getBookImageUrl() {
         return bookImageUrl;
     }
-    public String getBookAuthor() {
 
-        return bookAuthor;
+    public void setBookImageUrl(String bookImageUrl) {
+        this.bookImageUrl = bookImageUrl;
     }
-    public String getBookName() {
-        return bookName;
+
+    public String getBookChapterUrl() {
+        return bookChapterUrl;
+    }
+
+    public void setBookChapterUrl(String bookChapterUrl) {
+        this.bookChapterUrl = bookChapterUrl;
     }
 
     public List<String> getChapterNameList() {
         return chapterNameList;
     }
 
+    public void setChapterNameList(List<String> chapterNameList) {
+        this.chapterNameList = chapterNameList;
+    }
+
     public List<String> getChapterContentList() {
         return chapterContentList;
     }
 
+    public void setChapterContentList(List<String> chapterContentList) {
+        this.chapterContentList = chapterContentList;
+    }
 }
